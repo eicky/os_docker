@@ -1,7 +1,7 @@
-FROM ubuntu:20.04
+FROM debian:9
 
 LABEL AUTHOR="Eicky" \
-	  VERSION=20.04
+	  VERSION=9
 
 RUN apt-get -y update \
 	&& apt-get upgrade \

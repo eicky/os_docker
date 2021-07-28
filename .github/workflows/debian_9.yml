@@ -1,4 +1,4 @@
-name: 构建debian 10镜像
+name: 构建debian 9镜像
 #防止fork乱用action设置只能手动触发构建
 on: workflow_dispatch
 
@@ -28,10 +28,10 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./debian/10/Dockerfile
+          file: ./debian/9/Dockerfile
           platforms: linux/386,linux/amd64
           push: true
-          tags: eickydev/os:debian-10
+          tags: eickydev/os:debian-9
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
