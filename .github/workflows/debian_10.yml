@@ -1,0 +1,37 @@
+name: 构建debian 10镜像
+#防止fork乱用action设置只能手动触发构建
+on: workflow_dispatch
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: master
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: 构建并推送到Dockerhub镜像仓库
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./debain/10/Dockerfile
+          platforms: linux/386,linux/amd64,linux/arm/v5
+          push: true
+          tags: eickydev/os:debian-10
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
